@@ -1,0 +1,38 @@
+# Default
+User-agent: *
+Disallow: /
+Allow: /$
+
+# Google
+User-agent: Googlebot
+User-agent: AdsBot-Google
+User-agent: Mediapartners-Google
+User-agent: APIs-Google
+User-agent: GoogleAdSenseInfeed
+User-agent: Storebot-Google
+User-agent: Google-InspectionTool
+User-agent: GoogleOther
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# CN
+User-agent: Baiduspider
+User-agent: Baidu-imagespider
+User-agent: Sogou
+User-agent: 360Spider
+User-agent: ShenmaSpider
+Allow: /
+
+# Other Search Engine
+User-agent: YandexBot
+User-agent: YandexImages
+User-agent: DuckDuckBot
+User-agent: Slurp
+User-agent: NaverBot
+User-agent: Exabot
+Allow: /
+
+Sitemap: https://www.budabuxiao.com/sitemap.xml

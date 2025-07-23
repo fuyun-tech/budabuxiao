@@ -1,0 +1,48 @@
+@if (!errorPage) {
+  @if (!errorState || !errorState.visible) {
+    @if (!isMobile) {
+      <app-header [postTaxonomies]="postTaxonomies"></app-header>
+      <div class="body-wrap">
+        <div class="body" [class.body-center]="isBodyCentered">
+          <router-outlet/>
+        </div>
+      </div>
+      <app-footer></app-footer>
+    } @else {
+      <div class="m-body-wrap" [class.open]="siderVisible">
+        <app-header [postTaxonomies]="postTaxonomies"></app-header>
+        <div class="m-body">
+          <main class="m-main" [class.m-main-center]="isBodyCentered">
+            <router-outlet/>
+          </main>
+          <app-footer></app-footer>
+        </div>
+        @if (siderVisible) {
+          <div class="m-mask m-mask-sider" (click)="closeSider()"></div>
+        }
+      </div>
+      <app-m-sider></app-m-sider>
+    }
+    <img src="/assets/images/adimage.gif"
+         [style.display]="'none'"
+         (load)="checkAdsStatus(true)"
+         (error)="checkAdsStatus(false)"
+         alt="">
+  } @else {
+    <!--global errors-->
+    @switch (errorState.code) {
+      @case (403) {
+        <app-forbidden [errorState]="errorState"></app-forbidden>
+      }
+      @case (404) {
+        <app-not-found [errorState]="errorState"></app-not-found>
+      }
+      @default {
+        <app-server-error [errorState]="errorState"></app-server-error>
+      }
+    }
+  }
+} @else {
+  <!--error pages-->
+  <router-outlet/>
+}
