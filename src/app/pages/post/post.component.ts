@@ -21,7 +21,6 @@ import { FavoriteType } from 'src/app/enums/favorite';
 import { ActionObjectType, ActionType } from 'src/app/enums/log';
 import { PostType } from 'src/app/enums/post';
 import { VoteType, VoteValue } from 'src/app/enums/vote';
-import { BookEntity } from 'src/app/interfaces/book';
 import { BreadcrumbEntity } from 'src/app/interfaces/breadcrumb';
 import { OptionEntity } from 'src/app/interfaces/option';
 import { Post, PostModel } from 'src/app/interfaces/post';
@@ -33,7 +32,6 @@ import { CopyLinkPipe } from 'src/app/pipes/copy-link.pipe';
 import { CopyTypePipe } from 'src/app/pipes/copy-type.pipe';
 import { NumberViewPipe } from 'src/app/pipes/number-view.pipe';
 import { SafeHtmlPipe } from 'src/app/pipes/safe-html.pipe';
-import { BookService } from 'src/app/services/book.service';
 import { BreadcrumbService } from 'src/app/services/breadcrumb.service';
 import { CommentService } from 'src/app/services/comment.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -101,10 +99,6 @@ export class PostComponent implements OnInit {
     );
   }
 
-  private get postBookName() {
-    return this.bookService.getBookName(this.postBook, false);
-  }
-
   protected pageIndex = 'post-article';
 
   private readonly copyHTML = '<span class="fi fi-copy"></span>Copy code';
@@ -116,7 +110,6 @@ export class PostComponent implements OnInit {
   private postId = '';
   private postSlug = '';
   private referrer = '';
-  private postBook?: BookEntity;
   private codeList: string[] = [];
 
   constructor(
@@ -137,8 +130,7 @@ export class PostComponent implements OnInit {
     private readonly favoriteService: FavoriteService,
     private readonly commentService: CommentService,
     private readonly clipboardService: ClipboardService,
-    private readonly logService: LogService,
-    private readonly bookService: BookService
+    private readonly logService: LogService
   ) {
     this.isMobile = this.userAgentService.isMobile;
   }
@@ -338,7 +330,6 @@ export class PostComponent implements OnInit {
 
     this.post = post.post;
     this.post.postContent = result.content;
-    this.postBook = post.book;
     this.codeList = result.codeList;
     this.post.postSource = this.postService.getPostSource(post);
     this.postMeta = post.meta;
@@ -354,7 +345,6 @@ export class PostComponent implements OnInit {
     }
 
     this.postService.updateActivePostId(post.post.postId);
-    this.postService.updateActiveBook(post.book);
     this.postService.updateRootTaxonomy((post.breadcrumbs || [])[0]?.slug || '');
     this.updateBreadcrumbs(this.isArticle ? post.breadcrumbs || [] : []);
     this.updatePageIndex();
@@ -372,34 +362,13 @@ export class PostComponent implements OnInit {
       url: '/posts',
       isHeader: false
     });
-    if (this.postBook) {
-      breadcrumbs[breadcrumbs.length - 1].isHeader = false;
-      breadcrumbs.push({
-        label: this.postBookName.shortName,
-        tooltip: this.postBookName.fullName,
-        url: '/posts',
-        param: {
-          bookId: this.postBook.bookId
-        },
-        isHeader: true
-      });
-    }
 
     this.breadcrumbService.updateBreadcrumbs(breadcrumbs);
   }
 
   private updatePageInfo() {
-    const titles: string[] = [this.appInfo.appName];
+    const titles: string[] = [this.post.postTitle, this.appInfo.appName];
     const keywords: string[] = this.postTags.map((item) => item.tagName).concat(this.appInfo.keywords);
-
-    if (this.postBook) {
-      titles.unshift(this.postBook.bookName);
-      if (this.postBook.bookIssue) {
-        titles.unshift(this.postBook.bookIssue);
-      }
-      keywords.unshift(this.postBook.bookName);
-    }
-    titles.unshift(this.post.postTitle);
 
     this.metaService.updateHTMLMeta({
       title: titles.join(' - '),

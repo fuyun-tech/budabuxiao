@@ -44,8 +44,7 @@
                     </div>
                     <div class="actions">
                       <div class="action-item" title="浏览: {{ post.post.postViews | numberView: 'K' }}">
-                        <nz-icon nzType="eye" />
-                        <span>{{ post.post.postViews | numberView: 'K' }}</span>
+                        <nz-icon nzType="eye" /><span>{{ post.post.postViews | numberView: 'K' }}</span>
                       </div>
                       @if (post.post.commentFlag !== 'closed') {
                         <div class="action-item" title="评论: {{ post.post.postComments | numberView: 'K' }}">
@@ -88,7 +87,8 @@
                 </a>
               </div>
               <div class="post-content">
-                <h2><a [routerLink]="post.postGuid" [title]="post.postTitle" rel="bookmark">{{ post.postTitle }}</a>
+                <h2>
+                  <a [routerLink]="post.postGuid" [title]="post.postTitle" rel="bookmark">{{ post.postTitle }}</a>
                 </h2>
                 <div class="post-meta-wrap">
                   <div class="post-meta">
@@ -97,8 +97,7 @@
                     </div>
                     <div class="actions">
                       <div class="action-item" title="浏览: {{ post.postViews | numberView: 'K' }}">
-                        <nz-icon nzType="eye" />
-                        <span>{{ post.postViews | numberView: 'K' }}</span>
+                        <nz-icon nzType="eye" /><span>{{ post.postViews | numberView: 'K' }}</span>
                       </div>
                       @if (post.commentFlag !== 'closed') {
                         <div class="action-item" title="评论: {{ post.postComments | numberView: 'K' }}">
